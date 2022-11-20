@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import styles from './page.module.css'
 
+
 export default function Home() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -82,7 +83,7 @@ export default function Home() {
         <p>OR</p>
         <input id="photo" type="file" onChange={handleImage.bind(this)}/>
 
-        {loading && <p>It's a...</p>}
+        {loading && <p>It&apos;s a...</p>}
         {!loading && predictedImage && <h2> {predictedImage}</h2>}
       </main>
 
