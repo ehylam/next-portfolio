@@ -50,21 +50,30 @@ export default function Home() {
       setImage(frame);
     };
 
-    const constraints = {
-      audio: false,
-      video: { width: 1280, height: 720 }
-    };
-
-    navigator.mediaDevices.getUserMedia(constraints)
-    .then((mediaStream) => {
-      videoRef.current.srcObject = mediaStream;
-
-      videoRef.current.onloadedmetadata = () => {
-        videoRef.current.play();
+    let facingMode = 'user';
+    navigator.mediaDevices.enumerateDevices().then(devices => {
+      const hasEnvironment = devices.some(device => device.kind === 'videoinput' && device.label.toLowerCase().includes('environment'));
+      if (hasEnvironment) {
+        facingMode = 'environment';
+      }
+    }).then(() => {
+      const constraints = {
+        audio: false,
+        video: { width: 1280, height: 720 },
+        facingMode: facingMode
       };
-    })
-    .catch((err) => {
-      console.error(`${err.name}: ${err.message}`);
+
+      navigator.mediaDevices.getUserMedia(constraints)
+      .then((mediaStream) => {
+        videoRef.current.srcObject = mediaStream;
+
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current.play();
+        };
+      })
+      .catch((err) => {
+        console.error(`${err.name}: ${err.message}`);
+      });
     });
   },[videoRef]);
 
